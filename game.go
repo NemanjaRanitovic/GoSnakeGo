@@ -1,9 +1,27 @@
 package main
 
 import (
-	"fmt"
+	"time"
+
+	"github.com/gdamore/tcell"
 )
 
-func FunctionInFile1() {
-	fmt.Println("This function is defined in file1.go")
+type Game struct {
+	Screen    tcell.Screen
+	snakeBody SnakeBody
+}
+
+func (g *Game) Run() {
+	defStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite)
+	g.Screen.SetStyle(defStyle)
+	width, height := g.Screen.Size()
+	snakeStyle := tcell.StyleDefault.Background(tcell.ColorWhite).Foreground(tcell.ColorWhite)
+
+	for {
+		g.Screen.Clear()
+		g.snakeBody.Update(width, height)
+		g.Screen.SetContent(g.snakeBody.X, g.snakeBody.Y, ' ', nil, snakeStyle)
+		time.Sleep(40 * time.Millisecond)
+		g.Screen.Show()
+	}
 }
